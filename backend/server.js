@@ -34,8 +34,13 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:3000',
-  'http://127.0.0.1:3000'
+  'http://127.0.0.1:3000',
+  'https://label-forge-tool.vercel.app' // Vercel production frontend
 ];
+
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -44,12 +49,13 @@ app.use(cors({
     
     const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(origin);
     const isAllowed = allowedOrigins.includes(origin);
+    const isVercel = origin.endsWith('.vercel.app');
 
-    if (process.env.NODE_ENV !== 'production' || isLocalhost || isAllowed) {
+    if (process.env.NODE_ENV !== 'production' || isLocalhost || isAllowed || isVercel) {
       return callback(null, true);
     }
     
-    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
     return callback(new Error(msg), false);
   },
   credentials: true,
