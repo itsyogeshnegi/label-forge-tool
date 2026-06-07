@@ -79,11 +79,14 @@ app.use('/api/stats', statsRoutes);
 // Setup for production build (static files serving)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+import fs from 'fs';
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+const distPath = path.join(__dirname, '../frontend/dist');
+
+if (process.env.NODE_ENV === 'production' && fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
+    res.sendFile(path.resolve(distPath, 'index.html'));
   });
 } else {
   app.get('/', (req, res) => {
