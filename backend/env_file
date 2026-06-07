@@ -1,0 +1,7 @@
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/labelforge
+JWT_SECRET=labelforgesecretkey987654321
+ADMIN_NAME=Admin User
+ADMIN_EMAIL=admin@labelforge.com
+ADMIN_PASSWORD=adminpassword
+NODE_ENV=development
